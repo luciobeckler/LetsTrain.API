@@ -1,0 +1,6 @@
+@LetsTrain.API_HostAddress = http://localhost:5174
+
+GET {{LetsTrain.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
