@@ -3,6 +3,7 @@ using System;
 using LetsTrain.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LetsTrain.API.Migrations
 {
     [DbContext(typeof(LetsTrainDb))]
-    partial class LetsTrainDbModelSnapshot : ModelSnapshot
+    [Migration("20250414190445_Adicionando autentificacao e roles")]
+    partial class Adicionandoautentificacaoeroles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,14 +116,7 @@ namespace LetsTrain.API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Alunos");
                 });
@@ -429,17 +425,6 @@ namespace LetsTrain.API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LetsTrain.API.Models.Aluno", b =>
-                {
-                    b.HasOne("LetsTrain.API.Models.Identity.ApplicationUser", "User")
-                        .WithOne("Aluno")
-                        .HasForeignKey("LetsTrain.API.Models.Aluno", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("LetsTrain.API.Models.Aula", b =>
                 {
                     b.HasOne("LetsTrain.API.Models.Professor", "Professor")
@@ -519,11 +504,6 @@ namespace LetsTrain.API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("LetsTrain.API.Models.Identity.ApplicationUser", b =>
-                {
-                    b.Navigation("Aluno");
                 });
 
             modelBuilder.Entity("LetsTrain.API.Models.Professor", b =>

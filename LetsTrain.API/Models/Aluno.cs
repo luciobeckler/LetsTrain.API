@@ -1,4 +1,6 @@
-﻿namespace LetsTrain.API.Models
+﻿using LetsTrain.API.Models.Identity;
+
+namespace LetsTrain.API.Models
 {
     public class Aluno
     {
@@ -13,5 +15,8 @@
         public int DiaVencimentoMatricula { get; set; }
 
         public List<Aula> Aulas { get; set; } = new List<Aula>();
+
+        public string UserId { get; set; }
+        public ApplicationUser? User { get; set; }
     }
 }
