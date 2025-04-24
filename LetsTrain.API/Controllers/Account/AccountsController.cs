@@ -28,6 +28,10 @@ namespace LetsTrain.API.Controllers.Account
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            var emailEmUso = await _userManager.FindByEmailAsync(model.Email);
+            if (emailEmUso != null)
+                return BadRequest("E-mail já está em uso.");
+
             var user = new ApplicationUser
             {
                 UserName = model.Email,
@@ -44,8 +48,6 @@ namespace LetsTrain.API.Controllers.Account
             {
                 Nome = model.Nome,
                 Email = model.Email,
-                Telefone = model.Telefone,
-                DiaVencimentoMatricula = model.DiaVencimento,
                 IsAtivo = true,
                 UserId = user.Id
             };
@@ -53,8 +55,9 @@ namespace LetsTrain.API.Controllers.Account
             _context.Alunos.Add(aluno);
             await _context.SaveChangesAsync();
 
-            return Ok("Aluno registrado com sucesso");
+            return Ok(new { message = "Aluno registrado com sucesso" });
         }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
