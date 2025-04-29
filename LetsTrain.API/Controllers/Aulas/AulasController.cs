@@ -45,15 +45,32 @@ namespace LetsTrain.API.Controllers.Aulas
             }
         }
 
-        // ✅ Novo endpoint para criar uma aula
         [HttpPost]
         public async Task<IActionResult> CreateAula([FromBody] CreateAulaDTO createAulaDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var aula = await _aulasService.CreateAula(createAulaDto);
+            var aula = await _aulasService.CreateAulaAsync(createAulaDto);
             return CreatedAtAction(nameof(CreateAula), new { id = aula.Id }, aula);
+        }
+
+        [HttpGet("getDetalhesAulas/{id}")]
+        public async Task<IActionResult> GetDetalhesAula(int id)
+        {
+            try
+            {
+                var detalhes = await _aulasService.GetDetalhesAulaByIdAsync(id);
+                return Ok(detalhes);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Erro interno no servidor.", detalhes = ex.Message });
+            }
         }
     }
 }

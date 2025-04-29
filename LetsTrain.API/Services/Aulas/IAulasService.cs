@@ -8,6 +8,7 @@ namespace LetsTrain.API.Services.Aulas
     {
         Task<List<Aula>> ListAllAsync();
         Task<bool> MatricularAlunoNaAulaAsync(int alunoId, int aulaId);
-        Task<Aula> CreateAula(CreateAulaDTO createAula);
+        Task<Aula> CreateAulaAsync(CreateAulaDTO createAula);
+        Task<DetalhesAulaDTO> GetDetalhesAulaByIdAsync(int aulaId);
     }
 }

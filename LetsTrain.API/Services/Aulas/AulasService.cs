@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LetsTrain.API.Data;
+using LetsTrain.API.DTO.Aluno;
 using LetsTrain.API.DTO.Aula;
 using LetsTrain.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -60,7 +61,7 @@ namespace LetsTrain.API.Services.Aulas
             return true;
         }
 
-        public async Task<Aula> CreateAula(CreateAulaDTO createAula)
+        public async Task<Aula> CreateAulaAsync(CreateAulaDTO createAula)
         {
             var professorExiste = await _db.Professores.AnyAsync(p => p.Id == createAula.ProfessorId);
             if(!professorExiste)
@@ -76,5 +77,29 @@ namespace LetsTrain.API.Services.Aulas
 
             return aula;
         }
+
+        public async Task<DetalhesAulaDTO> GetDetalhesAulaByIdAsync(int aulaId)
+        {
+            var aula = await _db.Aulas
+                .Include(a => a.Professor) 
+                .Include(a => a.Treino)
+                .Include(a => a.Alunos)
+                .FirstOrDefaultAsync(a => a.Id == aulaId);
+
+            if (aula == null)
+                throw new KeyNotFoundException($"Aula com ID {aulaId} não encontrada.");
+
+            return new DetalhesAulaDTO
+            {
+                NomeProfessor = aula.Professor.Nome,
+                TreinoNome = aula.Treino.Nome,
+                DuracaoEmMinutos = aula.Treino.DuracaoEmMinutos,
+                Alunos = aula.Alunos.Select(a => new InfoAlunoDTO
+                {
+                    Nome = a.Nome
+                }).ToList()
+            };
+        }
+
     }
 }
