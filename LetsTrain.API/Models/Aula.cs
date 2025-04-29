@@ -9,6 +9,7 @@ namespace LetsTrain.API.Models
         public int QuantMaximaAlunos { get; set; }
         public string Local { get; set; } = null!;
         public int? RecorrenciaEmDias { get; set; }
+        public int Vagas { get; set; }
 
         //Relacionamentos
         public int TreinoId { get; set; }
@@ -20,6 +21,6 @@ namespace LetsTrain.API.Models
         public Professor Professor { get; set; }
 
 
-        public List<Aluno> Aluno { get; set; } = new List<Aluno>();
+        public List<Aluno> Alunos { get; set; } = new List<Aluno>();
     }
 }
