@@ -1,5 +1,9 @@
 ﻿using LetsTrain.API.Data;
 using LetsTrain.API.Models.Identity;
+using LetsTrain.API.Services.Aulas;
+using LetsTrain.API.Services.Exercicios;
+using LetsTrain.API.Services.Professores;
+using LetsTrain.API.Services.Treinos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -47,5 +51,12 @@ public static class DependencyInjectionConfig
         });
 
         builder.Services.AddScoped<JwtTokenGenerator>();
+        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+        builder.Services.AddScoped<IAulasService, AulasService>();
+        builder.Services.AddScoped<IProfessoresService, ProfessoresService>();
+        builder.Services.AddScoped<ITreinosService, TreinosService>();
+        builder.Services.AddScoped<IExerciciosService, ExerciciosService>();
+
     }
 }
