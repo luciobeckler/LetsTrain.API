@@ -14,5 +14,6 @@ public class AutoMapperProfile : Profile
         CreateMap<Aula, CreateAulaDTO>().ReverseMap();
         CreateMap<Professor, CreateProfessorDTO>().ReverseMap();
         CreateMap<Exercicio, CreateExercicioDTO>().ReverseMap();
+        CreateMap<Aula, AulaResponseDTO>().ReverseMap();
     }
 }

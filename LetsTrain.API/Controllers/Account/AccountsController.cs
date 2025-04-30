@@ -60,15 +60,23 @@ namespace LetsTrain.API.Controllers.Account
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto model)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Senha))
+            var user = await _userManager.FindByEmailAsync(loginDto.Email);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Senha))
                 return Unauthorized("Usuário ou senha inválidos");
 
             var token = await _jwtTokenGenerator.GenerateToken(user);
 
-            return Ok(new { token });
+            Response.Cookies.Append("auth_token", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, 
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddHours(1)
+            });
+
+            return Ok(new { message = "Login realizado com sucesso." });
         }
     }
 }

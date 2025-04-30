@@ -4,10 +4,12 @@
     {
         public static void ConfigureCors(this WebApplication app)
         {
-            app.UseCors(options =>
-                options.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader());
+            app.UseCors(policy =>
+                policy.WithOrigins("http://localhost:4200") // origem do Angular
+                      .AllowAnyMethod()
+                      .AllowAnyHeader()
+                      .AllowCredentials());
         }
     }
+
 }

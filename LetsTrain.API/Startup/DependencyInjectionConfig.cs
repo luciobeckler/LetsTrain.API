@@ -48,6 +48,19 @@ public static class DependencyInjectionConfig
                 ValidAudience = builder.Configuration["Jwt:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
             };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var token = context.Request.Cookies["auth_token"];
+                    if (!string.IsNullOrEmpty(token))
+                    {
+                        context.Token = token;
+                    }
+                    return Task.CompletedTask;
+                }
+            };
         });
 
         builder.Services.AddScoped<JwtTokenGenerator>();

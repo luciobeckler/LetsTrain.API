@@ -2,6 +2,7 @@
 using LetsTrain.API.Models.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace LetsTrain.API.Data
 {
@@ -18,10 +19,17 @@ namespace LetsTrain.API.Data
         {
             base.OnModelCreating(builder);
 
+            //1-1 Aluno-User
             builder.Entity<Aluno>()
                 .HasOne(a => a.User)                 
                 .WithOne(u => u.Aluno)              
-                .HasForeignKey<Aluno>(a => a.UserId); 
+                .HasForeignKey<Aluno>(a => a.UserId);
+
+            //n-n Aula-Aluno
+            builder.Entity<Aula>()
+                .HasMany(a => a.Alunos)
+                .WithMany(a => a.Aulas)
+                .UsingEntity(j => j.ToTable("AlunoAula"));
         }
     }
 }
